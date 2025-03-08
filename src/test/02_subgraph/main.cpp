@@ -12,6 +12,7 @@ using namespace std;
 
 int main() {
   Graphviz::Graph graph("G", true);
+
   auto& registrar = graph.GetRegistrar();
 
   auto v_a0 = registrar.RegisterNode("a0");
