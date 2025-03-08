@@ -1,6 +1,6 @@
 # MyGraphviz
 
-My Graphviz wrapper
+**My** **Graphviz** C++ wrapper
 
 [![repo-size](https://img.shields.io/github/languages/code-size/shimakaze09/MyGraphviz?style=flat)](https://github.com/shimakaze09/MyGraphviz/archive/main.zip) [![tag](https://img.shields.io/github/v/tag/shimakaze09/MyGraphviz)](https://github.com/shimakaze09/MyGraphviz/tags) [![license](https://img.shields.io/github/license/shimakaze09/MyGraphviz)](LICENSE)
 
