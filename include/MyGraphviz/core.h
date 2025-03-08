@@ -21,13 +21,13 @@ class Registrar {
   }
 
   const std::unordered_map<size_t,
-                           std::vector<std::pair<std::string, std::string>>>&
+                           std::unordered_map<std::string, std::string>>&
   GetNodeAttrs() const noexcept {
     return nodeAttrs;
   }
 
   const std::unordered_map<size_t,
-                           std::vector<std::pair<std::string, std::string>>>&
+                           std::unordered_map<std::string, std::string>>&
   GetEdgeAttrs() const noexcept {
     return edgeAttrs;
   }
@@ -59,13 +59,23 @@ class Registrar {
 
   Registrar& RegisterNodeAttr(size_t nodeIdx, std::string key,
                               std::string value) {
-    nodeAttrs[nodeIdx].emplace_back(std::move(key), std::move(value));
+    nodeAttrs[nodeIdx].emplace(std::move(key), std::move(value));
     return *this;
   }
 
   Registrar& RegisterEdgeAttr(size_t edgeIdx, std::string key,
                               std::string value) {
-    edgeAttrs[edgeIdx].emplace_back(std::move(key), std::move(value));
+    edgeAttrs[edgeIdx].emplace(std::move(key), std::move(value));
+    return *this;
+  }
+
+  Registrar& DeregisterNodeAttr(size_t nodeIdx, const std::string& key) {
+    nodeAttrs[nodeIdx].erase(key);
+    return *this;
+  }
+
+  Registrar& DeregisterEdgeAttr(size_t edgeIdx, const std::string& key) {
+    edgeAttrs[edgeIdx].erase(key);
     return *this;
   }
 
@@ -77,12 +87,12 @@ class Registrar {
 
   std::vector<std::string> nodes;
   std::unordered_map<std::string, size_t> id2idx;
-  std::unordered_map<size_t, std::vector<std::pair<std::string, std::string>>>
+  std::unordered_map<size_t, std::unordered_map<std::string, std::string>>
       nodeAttrs;
 
   std::vector<std::pair<size_t, size_t>> edges;
   std::unordered_map<size_t, std::unordered_map<size_t, size_t>> node2edge;
-  std::unordered_map<size_t, std::vector<std::pair<std::string, std::string>>>
+  std::unordered_map<size_t, std::unordered_map<std::string, std::string>>
       edgeAttrs;
 };
 
@@ -107,11 +117,16 @@ class Subgraph {
   Subgraph& RegisterGraphNodeAttr(std::string key, std::string value);
   Subgraph& RegisterGraphEdgeAttr(std::string key, std::string value);
 
+  Subgraph& DeregisterGraphAttr(const std::string& key);
+  Subgraph& DeregisterGraphNodeAttr(const std::string& key);
+  Subgraph& DeregisterGraphEdgeAttr(const std::string& key);
+
+  bool HaveNode(size_t nodeIdx) const;
+  bool HaveEdge(size_t edgeIdx) const;
   Subgraph& AddNode(size_t nodeIdx);
   Subgraph& AddEdge(size_t edgeIdx);
-
-  /*bool HaveNode(size_t nodeIdx) const;
-		bool HaveEdge(size_t edgeIdx) const;*/
+  Subgraph& EraseNode(size_t nodeIdx);
+  Subgraph& EraseEdge(size_t edgeIdx);
 
  protected:
   std::string Dump(bool isSub, bool isDigraph, size_t indent) const;
@@ -126,36 +141,21 @@ class Subgraph {
 
   std::string id;
 
-  std::vector<std::pair<std::string, std::string>> graphAttrs;
-  std::vector<std::pair<std::string, std::string>> graphNodeAttrs;
-  std::vector<std::pair<std::string, std::string>> graphEdgeAttrs;
+  std::unordered_map<std::string, std::string> graphAttrs;
+  std::unordered_map<std::string, std::string> graphNodeAttrs;
+  std::unordered_map<std::string, std::string> graphEdgeAttrs;
 
   std::vector<Subgraph*> subgraphs;
   std::unordered_map<std::string, size_t> subgraphID2idx;
 
-  std::vector<size_t> nodeIndices;
-  std::vector<size_t> edgeIndices;
+  std::unordered_set<size_t> nodeIndices;
+  std::unordered_set<size_t> edgeIndices;
 };
 
-class Graph : private Subgraph {
+class Graph : public Subgraph {
  public:
   Graph(std::string id, bool isDigraph = false);
   ~Graph();
-
-  using Subgraph::GetID;
-  using Subgraph::GetRegistrar;
-  using Subgraph::GetSubgraph;
-
-  // return new subgraph
-  using Subgraph::GenSubgraph;
-
-  // return *this
-  using Subgraph::RegisterGraphAttr;
-  using Subgraph::RegisterGraphEdgeAttr;
-  using Subgraph::RegisterGraphNodeAttr;
-
-  using Subgraph::AddEdge;
-  using Subgraph::AddNode;
 
   std::string Dump() const;
 
