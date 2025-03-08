@@ -5,29 +5,34 @@
 #pragma once
 
 #include <unordered_map>
+#include <unordered_set>
 
 #include <string>
 
 namespace My::Graphviz {
-class SubGraph {
+class Subgraph {
  public:
-  SubGraph(std::string id) : id{std::move(id)} {}
+  static constexpr size_t SelfIdx = static_cast<size_t>(0);
+
+  Subgraph(std::string id) : id{std::move(id)} {}
 
   const std::string& GetID() const noexcept { return id; }
 
-  size_t GetNodeIdx(const std::string& nodeID) const;
+  Subgraph& GetSubgraph(const std::string& subgraphID);
 
-  SubGraph& AddGraphAttr(std::string key, std::string value);
-  SubGraph& AddAllNodeAttr(std::string key, std::string value);
-  SubGraph& AddAllEdgeAttr(std::string key, std::string value);
+  Subgraph& AddGraphAttr(std::string key, std::string value);
+  Subgraph& AddAllNodeAttr(std::string key, std::string value);
+  Subgraph& AddAllEdgeAttr(std::string key, std::string value);
 
-  size_t AddSubGraph(SubGraph subgraph);
+  Subgraph& AddSubgraph(Subgraph subgraph);
 
-  size_t AddNode(std::string nodeID);
-  size_t AddEdge(size_t lhs, size_t rhs);
+  Subgraph& AddNode(std::string nodeID);
+  Subgraph& AddEdge(std::string lhs, std::string rhs);
 
-  SubGraph& AddNodeAttr(size_t nodeIdx, std::string key, std::string value);
-  SubGraph& AddEdgeAttr(size_t edgeIdx, std::string key, std::string value);
+  Subgraph& AddNodeAttr(const std::string& nodeID, std::string key,
+                        std::string value);
+  Subgraph& AddEdgeAttr(const std::string& lhs, const std::string& rhs,
+                        std::string key, std::string value);
 
  protected:
   std::string Dump(bool isSub, bool isDigraph, size_t indent) const;
@@ -38,39 +43,42 @@ class SubGraph {
   std::vector<std::pair<std::string, std::string>> allNodeAttrs;
   std::vector<std::pair<std::string, std::string>> allEdgeAttrs;
 
-  std::vector<SubGraph> subgraphs;
+  std::unordered_map<std::string, Subgraph> subgraphs;
 
-  std::vector<std::string> nodes;
-  std::unordered_map<std::string, size_t> id2idx;
-  std::unordered_map<size_t, std::vector<std::pair<std::string, std::string>>>
+  std::unordered_map<std::string,
+                     std::vector<std::pair<std::string, std::string>>>
       nodeAttrs;
 
-  std::vector<std::pair<size_t, size_t>> edges;
-  std::unordered_map<size_t, std::vector<std::pair<std::string, std::string>>>
+  std::unordered_map<std::string, std::pair<std::string, std::string>> edges;
+  std::unordered_map<std::string,
+                     std::vector<std::pair<std::string, std::string>>>
       edgeAttrs;
 };
 
-class Graph : private SubGraph {
+class Graph : private Subgraph {
  public:
-  Graph(std::string id, bool isDigraph = false, bool isStrict = false);
+  Graph(std::string id, bool isDigraph = false);
 
-  using SubGraph::AddEdge;
-  using SubGraph::AddNode;
-  using SubGraph::AddSubGraph;
-  using SubGraph::GetID;
-  using SubGraph::GetNodeIdx;
+  using Subgraph::GetID;
+  using Subgraph::GetSubgraph;
 
   Graph& AddGraphAttr(std::string key, std::string value);
   Graph& AddAllNodeAttr(std::string key, std::string value);
   Graph& AddAllEdgeAttr(std::string key, std::string value);
 
-  Graph& AddNodeAttr(size_t nodeIdx, std::string key, std::string value);
-  Graph& AddEdgeAttr(size_t edgeIdx, std::string key, std::string value);
+  Graph& AddSubgraph(Subgraph subgraph);
+
+  Graph& AddNode(std::string nodeID);
+  Graph& AddEdge(std::string lhs, std::string rhs);
+
+  Graph& AddNodeAttr(const std::string& nodeID, std::string key,
+                     std::string value);
+  Graph& AddEdgeAttr(const std::string& lhs, const std::string& rhs,
+                     std::string key, std::string value);
 
   std::string Dump() const;
 
  private:
   bool isDigraph;
-  bool isStrict;
 };
 }  // namespace My::Graphviz
