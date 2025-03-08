@@ -64,9 +64,12 @@ Graphviz::SubGraph& Graphviz::SubGraph::AddEdgeAttr(size_t edgeIdx,
   return *this;
 }
 
-Graphviz::SubGraph& Graphviz::SubGraph::AddSubGraph(SubGraph subgraph) {
+size_t Graphviz::SubGraph::AddSubGraph(SubGraph subgraph) {
+  size_t base = nodes.size();
+  for (const auto& node : subgraph.nodes)
+    nodes.push_back(node);
   subgraphs.emplace_back(std::move(subgraph));
-  return *this;
+  return base;
 }
 
 std::string Graphviz::SubGraph::Dump(bool isSub, bool isDigraph,
@@ -85,6 +88,8 @@ std::string Graphviz::SubGraph::Dump(bool isSub, bool isDigraph,
     return ss;
   };
 
+  print_indent();
+
   if (isSub)
     ss << "sub";
 
@@ -98,7 +103,7 @@ std::string Graphviz::SubGraph::Dump(bool isSub, bool isDigraph,
 
     print_indent() << head << " [" << std::endl;
     indent++;
-    for (const auto& [key, value] : graphAttrs)
+    for (const auto& [key, value] : attrs)
       print_indent() << key << " = " << "\"" << value << "\"" << std::endl;
     indent--;
     print_indent() << "]" << std::endl;
@@ -161,10 +166,6 @@ Graphviz::Graph& Graphviz::Graph::AddEdgeAttr(size_t edgeIdx, std::string key,
                                               std::string value) {
   return static_cast<Graph&>(
       SubGraph::AddEdgeAttr(edgeIdx, std::move(key), std::move(value)));
-}
-
-Graphviz::Graph& Graphviz::Graph::AddSubGraph(SubGraph subgraph) {
-  return static_cast<Graph&>(SubGraph::AddSubGraph(std::move(subgraph)));
 }
 
 std::string Graphviz::Graph::Dump() const {
