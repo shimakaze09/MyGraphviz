@@ -45,10 +45,8 @@ class Subgraph {
   Subgraph& EraseEdge(size_t edgeIdx);
 
  protected:
-  Subgraph(const Subgraph&) = default;
   Subgraph(Subgraph&&) = default;
-  Subgraph& operator=(const Subgraph&) = default;
-  Subgraph& operator=(Subgraph&&) = default;
+  Subgraph& operator=(Subgraph&&) noexcept = default;
 
   std::string Dump(bool isSub, bool isDigraph, size_t indent) const;
 

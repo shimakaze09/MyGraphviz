@@ -19,19 +19,15 @@ class Registrar {
     return edges;
   }
 
-  const std::unordered_map<size_t,
-                           std::unordered_map<std::string, std::string>>&
-  GetNodeAttrs() const noexcept {
-    return nodeAttrs;
-  }
+  using ElemAttrMap =
+      std::unordered_map<size_t, std::unordered_map<std::string, std::string>>;
 
-  const std::unordered_map<size_t,
-                           std::unordered_map<std::string, std::string>>&
-  GetEdgeAttrs() const noexcept {
-    return edgeAttrs;
-  }
+  const ElemAttrMap& GetNodeAttrs() const noexcept { return nodeAttrs; }
+
+  const ElemAttrMap& GetEdgeAttrs() const noexcept { return edgeAttrs; }
 
   bool IsRegisteredNode(const std::string& ID) const;
+  bool IsRegisteredEdge(size_t lhs, size_t rhs) const;
   bool IsRegisteredEdge(const std::string& lhsID,
                         const std::string& rhsID) const;
 
@@ -57,12 +53,10 @@ class Registrar {
 
   std::vector<std::string> nodes;
   std::unordered_map<std::string, size_t> id2idx;
-  std::unordered_map<size_t, std::unordered_map<std::string, std::string>>
-      nodeAttrs;
+  ElemAttrMap nodeAttrs;
 
   std::vector<std::pair<size_t, size_t>> edges;
   std::unordered_map<size_t, std::unordered_map<size_t, size_t>> node2edge;
-  std::unordered_map<size_t, std::unordered_map<std::string, std::string>>
-      edgeAttrs;
+  ElemAttrMap edgeAttrs;
 };
 }  // namespace My::Graphviz

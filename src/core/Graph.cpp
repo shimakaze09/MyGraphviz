@@ -32,7 +32,8 @@ std::string Graph::Dump() const {
   return ss.str();
 }
 
-Graph::Graph(Graph&& g) noexcept : Subgraph{g}, isDigraph{g.isDigraph} {
+Graph::Graph(Graph&& g) noexcept
+    : Subgraph{std::move(g)}, isDigraph{g.isDigraph} {
   g.registrar = nullptr;
 }
 
