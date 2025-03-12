@@ -4,9 +4,9 @@
 
 #pragma once
 
-#include <unordered_map>
-
+#include <map>
 #include <string>
+#include <vector>
 
 namespace My::MyGraphviz {
 class Registry {
@@ -20,19 +20,18 @@ class Registry {
   }
 
   using ElemAttrMap =
-      std::unordered_map<size_t, std::unordered_map<std::string, std::string>>;
+      std::map<size_t, std::map<std::string, std::string, std::less<>>>;
 
   const ElemAttrMap& GetNodeAttrs() const noexcept { return nodeAttrs; }
 
   const ElemAttrMap& GetEdgeAttrs() const noexcept { return edgeAttrs; }
 
-  bool IsRegisteredNode(const std::string& ID) const;
+  bool IsRegisteredNode(std::string_view ID) const;
   bool IsRegisteredEdge(size_t lhs, size_t rhs) const;
-  bool IsRegisteredEdge(const std::string& lhsID,
-                        const std::string& rhsID) const;
+  bool IsRegisteredEdge(std::string_view lhsID, std::string_view rhsID) const;
 
-  size_t GetNodeIndex(const std::string& ID) const;
-  size_t GetEdgeIndex(const std::string& lhsID, const std::string& rhsID) const;
+  size_t GetNodeIndex(std::string_view ID) const;
+  size_t GetEdgeIndex(std::string_view lhsID, std::string_view rhsID) const;
 
   size_t RegisterNode(std::string ID);
   size_t RegisterEdge(size_t lhs, size_t rhs);
@@ -42,8 +41,8 @@ class Registry {
   Registry& RegisterEdgeAttr(size_t edgeIndex, std::string key,
                              std::string value);
 
-  Registry& DeregisterNodeAttr(size_t nodeIndex, const std::string& key);
-  Registry& DeregisterEdgeAttr(size_t edgeIndex, const std::string& key);
+  Registry& DeregisterNodeAttr(size_t nodeIndex, std::string_view key);
+  Registry& DeregisterEdgeAttr(size_t edgeIndex, std::string_view key);
 
  private:
   Registry(const Registry&) = delete;
@@ -52,11 +51,11 @@ class Registry {
   Registry& operator=(Registry&&) = delete;
 
   std::vector<std::string> nodes;
-  std::unordered_map<std::string, size_t> id2idx;
+  std::map<std::string, size_t, std::less<>> id2idx;
   ElemAttrMap nodeAttrs;
 
   std::vector<std::pair<size_t, size_t>> edges;
-  std::unordered_map<size_t, std::unordered_map<size_t, size_t>> node2edge;
+  std::map<size_t, std::map<size_t, size_t>, std::less<>> node2edge;
   ElemAttrMap edgeAttrs;
 };
 }  // namespace My::MyGraphviz

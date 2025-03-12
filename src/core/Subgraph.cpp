@@ -17,7 +17,7 @@ Subgraph::~Subgraph() {
     delete subgraph;
 }
 
-Subgraph& Subgraph::GetSubgraph(const std::string& subgraphID) {
+Subgraph& Subgraph::GetSubgraph(std::string_view subgraphID) {
   return *subgraphs[subgraphID2idx.find(subgraphID)->second];
 }
 
@@ -36,18 +36,18 @@ Subgraph& Subgraph::RegisterGraphEdgeAttr(std::string key, std::string value) {
   return *this;
 }
 
-Subgraph& Subgraph::DeregisterGraphAttr(const std::string& key) {
-  graphAttrs.erase(key);
+Subgraph& Subgraph::DeregisterGraphAttr(std::string_view key) {
+  graphAttrs.erase(graphAttrs.find(key));
   return *this;
 }
 
-Subgraph& Subgraph::DeregisterGraphNodeAttr(const std::string& key) {
-  graphNodeAttrs.erase(key);
+Subgraph& Subgraph::DeregisterGraphNodeAttr(std::string_view key) {
+  graphNodeAttrs.erase(graphNodeAttrs.find(key));
   return *this;
 }
 
-Subgraph& Subgraph::DeregisterGraphEdgeAttr(const std::string& key) {
-  graphEdgeAttrs.erase(key);
+Subgraph& Subgraph::DeregisterGraphEdgeAttr(std::string_view key) {
+  graphEdgeAttrs.erase(graphEdgeAttrs.find(key));
   return *this;
 }
 
@@ -91,8 +91,8 @@ std::string Subgraph::Dump(bool isSub, bool isDigraph, size_t indent) const {
 
   std::string eop = isDigraph ? "->" : "--";
 
-  auto qoute = [](const std::string& id) {
-    return "\"" + id + "\"";
+  auto quote = [](std::string_view id) {
+    return "\"" + std::string(id) + "\"";
   };
 
   auto print_indent = [&]() -> std::stringstream& {
@@ -106,7 +106,7 @@ std::string Subgraph::Dump(bool isSub, bool isDigraph, size_t indent) const {
   if (isSub)
     ss << "sub";
 
-  ss << "graph " << qoute(id) << " {" << std::endl;
+  ss << "graph " << quote(id) << " {" << std::endl;
 
   indent++;
 
@@ -144,15 +144,15 @@ std::string Subgraph::Dump(bool isSub, bool isDigraph, size_t indent) const {
     const auto& nodeID = nodeIDs[nodeIndex];
     auto target = nodeAttrs.find(nodeIndex);
     if (target == nodeAttrs.end())
-      print_indent() << qoute(nodeID) << std::endl;
+      print_indent() << quote(nodeID) << std::endl;
     else
-      dumpAttrs(qoute(nodeID), target->second);
+      dumpAttrs(quote(nodeID), target->second);
   }
 
   for (size_t edgeIndex : edgeIndices) {
     const auto& [lhs, rhs] = edgeIDs[edgeIndex];
     std::string head =
-        qoute(nodeIDs[lhs]) + " " + eop + " " + qoute(nodeIDs[rhs]);
+        quote(nodeIDs[lhs]) + " " + eop + " " + quote(nodeIDs[rhs]);
     auto target = edgeAttrs.find(edgeIndex);
     if (target == edgeAttrs.end())
       print_indent() << head << std::endl;
