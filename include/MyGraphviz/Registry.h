@@ -8,10 +8,10 @@
 
 #include <string>
 
-namespace My::Graphviz {
-class Registrar {
+namespace My::MyGraphviz {
+class Registry {
  public:
-  Registrar() = default;
+  Registry() = default;
 
   const std::vector<std::string>& GetNodes() const noexcept { return nodes; }
 
@@ -37,19 +37,19 @@ class Registrar {
   size_t RegisterNode(std::string ID);
   size_t RegisterEdge(size_t lhs, size_t rhs);
 
-  Registrar& RegisterNodeAttr(size_t nodeIdx, std::string key,
-                              std::string value);
-  Registrar& RegisterEdgeAttr(size_t edgeIdx, std::string key,
-                              std::string value);
+  Registry& RegisterNodeAttr(size_t nodeIdx, std::string key,
+                             std::string value);
+  Registry& RegisterEdgeAttr(size_t edgeIdx, std::string key,
+                             std::string value);
 
-  Registrar& DeregisterNodeAttr(size_t nodeIdx, const std::string& key);
-  Registrar& DeregisterEdgeAttr(size_t edgeIdx, const std::string& key);
+  Registry& DeregisterNodeAttr(size_t nodeIdx, const std::string& key);
+  Registry& DeregisterEdgeAttr(size_t edgeIdx, const std::string& key);
 
  private:
-  Registrar(const Registrar&) = delete;
-  Registrar(Registrar&&) = delete;
-  Registrar& operator=(const Registrar&) = delete;
-  Registrar& operator=(Registrar&&) = delete;
+  Registry(const Registry&) = delete;
+  Registry(Registry&&) = delete;
+  Registry& operator=(const Registry&) = delete;
+  Registry& operator=(Registry&&) = delete;
 
   std::vector<std::string> nodes;
   std::unordered_map<std::string, size_t> id2idx;
@@ -59,4 +59,4 @@ class Registrar {
   std::unordered_map<size_t, std::unordered_map<size_t, size_t>> node2edge;
   ElemAttrMap edgeAttrs;
 };
-}  // namespace My::Graphviz
+}  // namespace My::MyGraphviz

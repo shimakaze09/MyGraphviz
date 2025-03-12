@@ -9,13 +9,13 @@
 
 #include <string>
 
-namespace My::Graphviz {
-class Registrar;
+namespace My::MyGraphviz {
+class Registry;
 
 class Subgraph {
  public:
-  Subgraph(Registrar* registrar, std::string id)
-      : registrar{registrar}, id{std::move(id)} {}
+  Subgraph(Registry* registry, std::string id)
+      : registry{registry}, id{std::move(id)} {}
 
   ~Subgraph();
 
@@ -23,7 +23,7 @@ class Subgraph {
 
   Subgraph& GetSubgraph(const std::string& subgraphID);
 
-  Registrar& GetRegistrar() { return *registrar; }
+  Registry& GetRegistry() { return *registry; }
 
   // return new subgraph
   Subgraph& GenSubgraph(std::string ID);
@@ -50,7 +50,7 @@ class Subgraph {
 
   std::string Dump(bool isSub, bool isDigraph, size_t indent) const;
 
-  Registrar* registrar;
+  Registry* registry;
 
  private:
   std::string id;
@@ -65,4 +65,4 @@ class Subgraph {
   std::unordered_set<size_t> nodeIndices;
   std::unordered_set<size_t> edgeIndices;
 };
-}  // namespace My::Graphviz
+}  // namespace My::MyGraphviz

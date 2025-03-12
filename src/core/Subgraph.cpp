@@ -4,13 +4,13 @@
 
 #include <MyGraphviz/Subgraph.h>
 
-#include <MyGraphviz/Registrar.h>
+#include <MyGraphviz/Registry.h>
 
 #include <sstream>
 
 #include <cassert>
 
-using namespace My::Graphviz;
+using namespace My::MyGraphviz;
 
 Subgraph::~Subgraph() {
   for (auto subgraph : subgraphs)
@@ -53,7 +53,7 @@ Subgraph& Subgraph::DeregisterGraphEdgeAttr(const std::string& key) {
 
 Subgraph& Subgraph::GenSubgraph(std::string ID) {
   subgraphID2idx[ID] = subgraphs.size();
-  auto newSubGraph = new Subgraph{registrar, std::move(ID)};
+  auto newSubGraph = new Subgraph{registry, std::move(ID)};
   subgraphs.push_back(newSubGraph);
   return *subgraphs.back();
 }
@@ -135,10 +135,10 @@ std::string Subgraph::Dump(bool isSub, bool isDigraph, size_t indent) const {
   for (const auto& subgraph : subgraphs)
     ss << subgraph->Dump(true, isDigraph, indent);
 
-  const auto& nodeIDs = registrar->GetNodes();
-  const auto& edgeIDs = registrar->GetEdges();
-  const auto& nodeAttrs = registrar->GetNodeAttrs();
-  const auto& edgeAttrs = registrar->GetEdgeAttrs();
+  const auto& nodeIDs = registry->GetNodes();
+  const auto& edgeIDs = registry->GetEdges();
+  const auto& nodeAttrs = registry->GetNodeAttrs();
+  const auto& edgeAttrs = registry->GetEdgeAttrs();
 
   for (size_t nodeIdx : nodeIndices) {
     const auto& nodeID = nodeIDs[nodeIdx];
