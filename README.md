@@ -14,9 +14,9 @@
  using namespace std;
  
  int main() {
-   Graphviz::Graph graph("hello world", true);
+   MyGraphviz::Graph graph("hello world", true);
  
-   auto& registrar = graph.GetRegistrar();
+   auto& registrar = graph.GetRegistry();
  
    auto v_a = registrar.RegisterNode("a");
    auto v_b = registrar.RegisterNode("b");
