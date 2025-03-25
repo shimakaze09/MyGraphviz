@@ -5,9 +5,9 @@
 #pragma once
 
 #include <map>
-#include <unordered_set>
-
 #include <string>
+#include <unordered_set>
+#include <vector>
 
 namespace My::MyGraphviz {
 class Registry;
