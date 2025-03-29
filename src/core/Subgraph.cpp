@@ -87,6 +87,9 @@ Subgraph& Subgraph::EraseEdge(size_t edgeIndex) {
 }
 
 std::string Subgraph::Dump(bool isSub, bool isDigraph, size_t indent) const {
+  if (!isSub && subgraphs.empty() && nodeIndices.empty() && edgeIndices.empty())
+    return "";
+
   std::stringstream ss;
 
   std::string eop = isDigraph ? "->" : "--";
