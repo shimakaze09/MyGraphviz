@@ -1,20 +1,12 @@
-//
-// Created by Admin on 8/03/2025.
-//
-
-#include <MyGraphviz/Subgraph.h>
-
-#include <MyGraphviz/Registry.h>
-
-#include <sstream>
-
+#include <MyGraphviz/Registry.hpp>
+#include <MyGraphviz/Subgraph.hpp>
 #include <cassert>
+#include <sstream>
 
 using namespace My::MyGraphviz;
 
 Subgraph::~Subgraph() {
-  for (auto subgraph : subgraphs)
-    delete subgraph;
+  for (auto subgraph : subgraphs) delete subgraph;
 }
 
 Subgraph& Subgraph::GetSubgraph(std::string_view subgraphID) {
@@ -25,12 +17,10 @@ Subgraph& Subgraph::RegisterGraphAttr(std::string key, std::string value) {
   graphAttrs.emplace(std::move(key), std::move(value));
   return *this;
 }
-
 Subgraph& Subgraph::RegisterGraphNodeAttr(std::string key, std::string value) {
   graphNodeAttrs.emplace(std::move(key), std::move(value));
   return *this;
 }
-
 Subgraph& Subgraph::RegisterGraphEdgeAttr(std::string key, std::string value) {
   graphEdgeAttrs.emplace(std::move(key), std::move(value));
   return *this;
@@ -100,23 +90,20 @@ std::string Subgraph::Dump(bool isSub, bool isDigraph,
   };
 
   auto print_indent = [&]() -> std::stringstream& {
-    for (std::size_t i = 0; i < indent; i++)
-      ss << "  ";
+    for (std::size_t i = 0; i < indent; i++) ss << "  ";
     return ss;
   };
 
   print_indent();
 
-  if (isSub)
-    ss << "sub";
+  if (isSub) ss << "sub";
 
   ss << "graph " << qoute(id) << " {" << std::endl;
 
   indent++;
 
   auto dumpAttrs = [&](std::string_view head, const auto& attrs) {
-    if (attrs.empty())
-      return;
+    if (attrs.empty()) return;
 
     if (attrs.size() > 1) {
       print_indent() << head << " [" << std::endl;

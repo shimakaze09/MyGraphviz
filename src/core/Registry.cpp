@@ -1,9 +1,4 @@
-//
-// Created by Admin on 8/03/2025.
-//
-
-#include <MyGraphviz/Registry.h>
-
+#include <MyGraphviz/Registry.hpp>
 #include <cassert>
 
 using namespace My::MyGraphviz;
@@ -14,12 +9,10 @@ bool Registry::IsRegisteredNode(std::string_view ID) const {
 
 bool Registry::IsRegisteredEdge(std::size_t lhs, std::size_t rhs) const {
   auto target_lhs = node2edge.find(lhs);
-  if (target_lhs == node2edge.end())
-    return false;
+  if (target_lhs == node2edge.end()) return false;
 
   auto target_rhs = target_lhs->second.find(rhs);
-  if (target_rhs == target_lhs->second.end())
-    return false;
+  if (target_rhs == target_lhs->second.end()) return false;
 
   return true;
 }

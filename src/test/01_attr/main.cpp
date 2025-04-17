@@ -1,9 +1,4 @@
-//
-// Created by Admin on 8/03/2025.
-//
-
-#include <MyGraphviz/MyGraphviz.h>
-
+#include <MyGraphviz/MyGraphviz.hpp>
 #include <iostream>
 
 using namespace My;

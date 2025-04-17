@@ -1,31 +1,21 @@
-//
-// Created by Admin on 8/03/2025.
-//
-
-#include <MyGraphviz/Graph.h>
-
-#include <MyGraphviz/Registry.h>
-
-#include <sstream>
-
+#include <MyGraphviz/Graph.hpp>
+#include <MyGraphviz/Registry.hpp>
 #include <cassert>
+#include <sstream>
 
 using namespace My::MyGraphviz;
 
 Graph::Graph(std::string id, bool isDigraph)
     : Subgraph{new Registry, std::move(id)}, isDigraph{isDigraph} {}
 
-Graph::~Graph() {
-  delete registry;
-}
+Graph::~Graph() { delete registry; }
 
 std::string Graph::Dump() const {
   std::stringstream ss;
 
   ss << "strict ";
 
-  if (isDigraph)
-    ss << "di";
+  if (isDigraph) ss << "di";
 
   ss << Subgraph::Dump(false, isDigraph, 0);
 
