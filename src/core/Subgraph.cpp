@@ -3,7 +3,7 @@
 #include <cassert>
 #include <sstream>
 
-using namespace My::MyGraphviz;
+using namespace Smkz::MyGraphviz;
 
 Subgraph::~Subgraph() {
   for (auto subgraph : subgraphs) delete subgraph;

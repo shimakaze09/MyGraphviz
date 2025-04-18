@@ -10,7 +10,7 @@
  #include <MyGraphviz/MyGraphviz.h>
  #include <iostream>
  
- using namespace My;
+ using namespace Smkz;
  using namespace std;
  
  int main() {

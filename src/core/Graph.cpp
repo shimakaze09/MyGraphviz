@@ -3,7 +3,7 @@
 #include <cassert>
 #include <sstream>
 
-using namespace My::MyGraphviz;
+using namespace Smkz::MyGraphviz;
 
 Graph::Graph(std::string id, bool isDigraph)
     : Subgraph{new Registry, std::move(id)}, isDigraph{isDigraph} {}

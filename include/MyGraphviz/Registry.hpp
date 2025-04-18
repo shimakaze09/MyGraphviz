@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 
-namespace My::MyGraphviz {
+namespace Smkz::MyGraphviz {
 class Registry {
  public:
   Registry() = default;
@@ -55,4 +55,4 @@ class Registry {
       node2edge;
   ElemAttrMap edgeAttrs;
 };
-}  // namespace My::MyGraphviz
+}  // namespace Smkz::MyGraphviz

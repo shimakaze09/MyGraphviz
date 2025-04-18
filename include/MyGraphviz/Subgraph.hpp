@@ -5,7 +5,7 @@
 #include <unordered_set>
 #include <vector>
 
-namespace My::MyGraphviz {
+namespace Smkz::MyGraphviz {
 class Registry;
 
 class Subgraph {
@@ -61,4 +61,4 @@ class Subgraph {
   std::unordered_set<std::size_t> nodeIndices;
   std::unordered_set<std::size_t> edgeIndices;
 };
-}  // namespace My::MyGraphviz
+}  // namespace Smkz::MyGraphviz

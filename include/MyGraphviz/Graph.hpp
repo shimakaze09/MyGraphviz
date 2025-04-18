@@ -2,7 +2,7 @@
 
 #include "Subgraph.hpp"
 
-namespace My::MyGraphviz {
+namespace Smkz::MyGraphviz {
 class Graph : public Subgraph {
  public:
   Graph(std::string id, bool isDigraph = false);
@@ -18,4 +18,4 @@ class Graph : public Subgraph {
  private:
   bool isDigraph;
 };
-}  // namespace My::MyGraphviz
+}  // namespace Smkz::MyGraphviz

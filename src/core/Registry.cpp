@@ -1,7 +1,7 @@
 #include <MyGraphviz/Registry.hpp>
 #include <cassert>
 
-using namespace My::MyGraphviz;
+using namespace Smkz::MyGraphviz;
 
 bool Registry::IsRegisteredNode(std::string_view ID) const {
   return id2idx.find(ID) != id2idx.end();
