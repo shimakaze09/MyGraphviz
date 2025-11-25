@@ -1,7 +1,7 @@
 #include <MyGraphviz/MyGraphviz.hpp>
 #include <iostream>
 
-using namespace Smkz;
+using namespace My;
 
 using namespace std;
 

@@ -2,42 +2,59 @@
 #include <MyGraphviz/Subgraph.hpp>
 #include <cassert>
 #include <sstream>
+#include <stdexcept>
 
-using namespace Smkz::MyGraphviz;
+using namespace My::MyGraphviz;
 
 Subgraph::~Subgraph() {
-  for (auto subgraph : subgraphs) delete subgraph;
+  for (auto subgraph : subgraphs)
+    delete subgraph;
 }
 
 Subgraph& Subgraph::GetSubgraph(std::string_view subgraphID) {
-  return *subgraphs[subgraphID2idx.find(subgraphID)->second];
+  auto it = subgraphID2idx.find(subgraphID);
+  if (it == subgraphID2idx.end()) {
+    throw std::runtime_error("Subgraph not found: " + std::string(subgraphID));
+  }
+  return *subgraphs[it->second];
 }
 
 Subgraph& Subgraph::RegisterGraphAttr(std::string key, std::string value) {
   graphAttrs.emplace(std::move(key), std::move(value));
   return *this;
 }
+
 Subgraph& Subgraph::RegisterGraphNodeAttr(std::string key, std::string value) {
   graphNodeAttrs.emplace(std::move(key), std::move(value));
   return *this;
 }
+
 Subgraph& Subgraph::RegisterGraphEdgeAttr(std::string key, std::string value) {
   graphEdgeAttrs.emplace(std::move(key), std::move(value));
   return *this;
 }
 
 Subgraph& Subgraph::DeregisterGraphAttr(std::string_view key) {
-  graphAttrs.erase(graphAttrs.find(key));
+  auto it = graphAttrs.find(key);
+  if (it != graphAttrs.end()) {
+    graphAttrs.erase(it);
+  }
   return *this;
 }
 
 Subgraph& Subgraph::DeregisterGraphNodeAttr(std::string_view key) {
-  graphNodeAttrs.erase(graphNodeAttrs.find(key));
+  auto it = graphNodeAttrs.find(key);
+  if (it != graphNodeAttrs.end()) {
+    graphNodeAttrs.erase(it);
+  }
   return *this;
 }
 
 Subgraph& Subgraph::DeregisterGraphEdgeAttr(std::string_view key) {
-  graphEdgeAttrs.erase(graphEdgeAttrs.find(key));
+  auto it = graphEdgeAttrs.find(key);
+  if (it != graphEdgeAttrs.end()) {
+    graphEdgeAttrs.erase(it);
+  }
   return *this;
 }
 
@@ -90,20 +107,23 @@ std::string Subgraph::Dump(bool isSub, bool isDigraph,
   };
 
   auto print_indent = [&]() -> std::stringstream& {
-    for (std::size_t i = 0; i < indent; i++) ss << "  ";
+    for (std::size_t i = 0; i < indent; i++)
+      ss << "  ";
     return ss;
   };
 
   print_indent();
 
-  if (isSub) ss << "sub";
+  if (isSub)
+    ss << "sub";
 
   ss << "graph " << qoute(id) << " {" << std::endl;
 
   indent++;
 
   auto dumpAttrs = [&](std::string_view head, const auto& attrs) {
-    if (attrs.empty()) return;
+    if (attrs.empty())
+      return;
 
     if (attrs.size() > 1) {
       print_indent() << head << " [" << std::endl;

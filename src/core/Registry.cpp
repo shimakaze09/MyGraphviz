@@ -1,7 +1,8 @@
 #include <MyGraphviz/Registry.hpp>
 #include <cassert>
+#include <stdexcept>
 
-using namespace Smkz::MyGraphviz;
+using namespace My::MyGraphviz;
 
 bool Registry::IsRegisteredNode(std::string_view ID) const {
   return id2idx.find(ID) != id2idx.end();
@@ -9,10 +10,12 @@ bool Registry::IsRegisteredNode(std::string_view ID) const {
 
 bool Registry::IsRegisteredEdge(std::size_t lhs, std::size_t rhs) const {
   auto target_lhs = node2edge.find(lhs);
-  if (target_lhs == node2edge.end()) return false;
+  if (target_lhs == node2edge.end())
+    return false;
 
   auto target_rhs = target_lhs->second.find(rhs);
-  if (target_rhs == target_lhs->second.end()) return false;
+  if (target_rhs == target_lhs->second.end())
+    return false;
 
   return true;
 }
@@ -26,8 +29,11 @@ bool Registry::IsRegisteredEdge(std::string_view lhsID,
 }
 
 std::size_t Registry::GetNodeIndex(std::string_view ID) const {
-  assert(IsRegisteredNode(ID));
-  return id2idx.find(ID)->second;
+  auto it = id2idx.find(ID);
+  if (it == id2idx.end()) {
+    throw std::runtime_error("Node not found: " + std::string(ID));
+  }
+  return it->second;
 }
 
 std::size_t Registry::GetEdgeIndex(std::string_view lhsID,
@@ -35,9 +41,19 @@ std::size_t Registry::GetEdgeIndex(std::string_view lhsID,
   std::size_t lhs = GetNodeIndex(lhsID);
   std::size_t rhs = GetNodeIndex(rhsID);
 
-  assert(IsRegisteredEdge(lhs, rhs));
+  auto it_lhs = node2edge.find(lhs);
+  if (it_lhs == node2edge.end()) {
+    throw std::runtime_error("Edge not found (lhs node has no edges): " +
+                             std::string(lhsID));
+  }
 
-  return node2edge.find(lhs)->second.find(rhs)->second;
+  auto it_rhs = it_lhs->second.find(rhs);
+  if (it_rhs == it_lhs->second.end()) {
+    throw std::runtime_error("Edge not found: " + std::string(lhsID) + " -> " +
+                             std::string(rhsID));
+  }
+
+  return it_rhs->second;
 }
 
 std::size_t Registry::RegisterNode(std::string ID) {

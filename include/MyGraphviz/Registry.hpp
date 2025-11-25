@@ -4,12 +4,13 @@
 #include <string>
 #include <vector>
 
-namespace Smkz::MyGraphviz {
+namespace My::MyGraphviz {
 class Registry {
  public:
   Registry() = default;
 
   const std::vector<std::string>& GetNodes() const noexcept { return nodes; }
+
   const std::vector<std::pair<std::size_t, std::size_t>>& GetEdges()
       const noexcept {
     return edges;
@@ -19,6 +20,7 @@ class Registry {
       std::map<std::size_t, std::map<std::string, std::string, std::less<>>>;
 
   const ElemAttrMap& GetNodeAttrs() const noexcept { return nodeAttrs; }
+
   const ElemAttrMap& GetEdgeAttrs() const noexcept { return edgeAttrs; }
 
   bool IsRegisteredNode(std::string_view ID) const;
@@ -55,4 +57,4 @@ class Registry {
       node2edge;
   ElemAttrMap edgeAttrs;
 };
-}  // namespace Smkz::MyGraphviz
+}  // namespace My::MyGraphviz

@@ -3,19 +3,22 @@
 #include <cassert>
 #include <sstream>
 
-using namespace Smkz::MyGraphviz;
+using namespace My::MyGraphviz;
 
 Graph::Graph(std::string id, bool isDigraph)
     : Subgraph{new Registry, std::move(id)}, isDigraph{isDigraph} {}
 
-Graph::~Graph() { delete registry; }
+Graph::~Graph() {
+  delete registry;
+}
 
 std::string Graph::Dump() const {
   std::stringstream ss;
 
   ss << "strict ";
 
-  if (isDigraph) ss << "di";
+  if (isDigraph)
+    ss << "di";
 
   ss << Subgraph::Dump(false, isDigraph, 0);
 

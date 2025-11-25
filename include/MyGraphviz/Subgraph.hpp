@@ -5,7 +5,7 @@
 #include <unordered_set>
 #include <vector>
 
-namespace Smkz::MyGraphviz {
+namespace My::MyGraphviz {
 class Registry;
 
 class Subgraph {
@@ -40,6 +40,9 @@ class Subgraph {
   Subgraph& EraseNode(std::size_t nodeIndex);
   Subgraph& EraseEdge(std::size_t edgeIndex);
 
+  Subgraph(const Subgraph&) = delete;
+  Subgraph& operator=(const Subgraph&) = delete;
+
  protected:
   Subgraph(Subgraph&&) = default;
   Subgraph& operator=(Subgraph&&) noexcept = default;
@@ -61,4 +64,4 @@ class Subgraph {
   std::unordered_set<std::size_t> nodeIndices;
   std::unordered_set<std::size_t> edgeIndices;
 };
-}  // namespace Smkz::MyGraphviz
+}  // namespace My::MyGraphviz
